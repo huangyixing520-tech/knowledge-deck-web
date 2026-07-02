@@ -1,0 +1,63 @@
+# Knowledge Deck Web
+
+把播客、文章和视频链接整理成可分享的知识卡片。目标是让用户不用听完一小时播客，也能快速抓住内容主线、关键判断、可复用观点和记忆钩子。
+
+线上预览：
+
+- App: https://knowledge-deck-web.vercel.app
+- Demo card: https://knowledge-deck-web.vercel.app/cards/demo-fde
+
+## 当前版本
+
+这是产品化 MVP，已经包含：
+
+- 首页工作台：输入链接，预估 token 消耗，创建生成任务。
+- Token 钱包雏形：展示余额、套餐和购买入口。
+- 任务接口：`POST /api/jobs`，当前返回样例卡片，后续接真实生成队列。
+- 公开分享页：可直接发给别人打开的知识卡片页面。
+- 内容原则：只基于正文、文字稿或字幕；不使用简介、shownotes、评论或平台元信息替代正文。
+
+## 本地运行
+
+```bash
+npm install
+npm run dev
+```
+
+打开 `http://localhost:3000`。
+
+如需生产构建：
+
+```bash
+npm run build
+npm run start
+```
+
+## 目录
+
+```text
+app/
+  api/jobs/route.js       生成任务 API
+  cards/[id]/page.jsx     公开知识卡片页
+  page.jsx                产品首页
+  globals.css             全局视觉样式
+lib/
+  pricing.js              token 套餐和消耗估算
+  sampleCards.js          demo 卡片数据
+PRODUCT_PLAN.md           产品路线
+```
+
+## 接下来要共建的模块
+
+1. 账号和真实 token 钱包。
+2. 支付 checkout 和 webhook。
+3. 真实生成队列：抓取、转写、提炼、渲染。
+4. `CardJSON` 数据结构和版本管理。
+5. 用户知识库、收藏、导出和搜索。
+
+## 协作约定
+
+- 不提交 `.env` 或任何 API key。
+- 提炼内容必须来自全文、文字稿或字幕。
+- 分享页优先保证内容质量、移动端可读性和转发欲。
+- 前端设计不要退回普通文档模板，要保持卡片化、可交互、适合传播。

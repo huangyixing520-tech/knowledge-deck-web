@@ -1,0 +1,17 @@
+node_modules/
+.next/
+out/
+.vercel/
+
+*.log
+.DS_Store
+
+.env
+.env.*
+!.env.example
+
+playwright-report/
+test-results/
+
+# Generated standalone build artifact created under Chinese parent paths.
+知识卡片/

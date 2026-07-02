@@ -1,0 +1,706 @@
+:root {
+  --ink: #111916;
+  --muted: #64716b;
+  --faint: #d9e1dc;
+  --paper: #f7faf7;
+  --panel: rgba(255, 255, 252, 0.86);
+  --accent: #064c43;
+  --accent-2: #d7ff70;
+  --line: rgba(17, 25, 22, 0.13);
+  --shadow: 0 24px 80px rgba(10, 37, 31, 0.13);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color: var(--ink);
+  background:
+    linear-gradient(rgba(6, 76, 67, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 76, 67, 0.045) 1px, transparent 1px),
+    var(--paper);
+  background-size: 44px 44px;
+}
+
+body {
+  margin: 0;
+  font-family: "Avenir Next", "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", sans-serif;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.product-shell {
+  min-height: 100dvh;
+  padding: 28px clamp(20px, 4vw, 56px) 56px;
+}
+
+.topbar,
+.reader-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  max-width: 1680px;
+  margin: 0 auto 28px;
+}
+
+.brand,
+.reader-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 12px;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pill,
+.ghost-link,
+.cost-badge,
+.example-row button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 9px 14px;
+  background: rgba(255, 255, 255, 0.62);
+  text-decoration: none;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.workspace {
+  max-width: 1680px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(260px, 0.86fr) minmax(460px, 1.42fr) minmax(260px, 0.8fr);
+  gap: 22px;
+  min-height: calc(100dvh - 126px);
+}
+
+.left-rail,
+.generator-panel,
+.right-rail > div,
+.source-panel,
+.memory-map,
+.turn-section,
+.quote-section,
+.judgment-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+
+.left-rail,
+.generator-panel {
+  border-radius: 30px;
+  padding: clamp(24px, 3vw, 42px);
+}
+
+.left-rail {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.kicker,
+.eyeline {
+  margin: 0 0 14px;
+  color: var(--accent);
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+.left-rail h1 {
+  max-width: 11ch;
+  margin-bottom: 22px;
+  font-family: "Songti SC", STSong, "PingFang SC", serif;
+  font-size: clamp(42px, 4.9vw, 78px);
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.lead,
+.section-copy p,
+.reader-note {
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.9;
+}
+
+.proof-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 32px;
+}
+
+.proof-list span {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.generator-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.panel-heading,
+.form-footer,
+.result-card,
+.deck-hero,
+.memory-map,
+.quote-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.panel-heading h2,
+.section-copy h2,
+.quote-section h2 {
+  margin: 0;
+  font-size: clamp(28px, 3vw, 48px);
+  line-height: 1.12;
+}
+
+.cost-badge {
+  align-self: start;
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.job-form {
+  display: grid;
+  gap: 12px;
+}
+
+.job-form label {
+  font-weight: 800;
+}
+
+.job-form textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 146px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.74);
+  color: var(--ink);
+  line-height: 1.7;
+  outline: none;
+}
+
+.job-form textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(6, 76, 67, 0.1);
+}
+
+.estimate {
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+}
+
+.estimate strong {
+  color: var(--ink);
+}
+
+.form-footer button,
+.result-card a,
+.plan button {
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 22px;
+  background: var(--accent);
+  color: white;
+  text-decoration: none;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.example-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.status-card,
+.result-card {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.loading-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.loading-card > span {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 3px solid var(--faint);
+  border-top-color: var(--accent);
+  animation: spin 0.9s linear infinite;
+}
+
+.error-card {
+  border-color: rgba(160, 40, 40, 0.35);
+  color: #8b2020;
+}
+
+.right-rail {
+  display: grid;
+  gap: 22px;
+  grid-template-rows: auto 1fr;
+}
+
+.right-rail > div {
+  border-radius: 30px;
+  padding: 28px;
+}
+
+.wallet-card strong {
+  display: block;
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 64px;
+  line-height: 1;
+}
+
+.wallet-card span,
+.queue-card li {
+  color: var(--muted);
+}
+
+.queue-card ol {
+  display: grid;
+  gap: 18px;
+  margin: 0;
+  padding-left: 22px;
+}
+
+.pricing-section {
+  max-width: 1680px;
+  margin: 28px auto 0;
+  display: grid;
+  grid-template-columns: minmax(280px, 0.8fr) minmax(520px, 1.2fr);
+  gap: 22px;
+}
+
+.section-copy,
+.plans {
+  border-top: 1px solid var(--line);
+  padding-top: 32px;
+}
+
+.plans {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.plan {
+  min-height: 220px;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.64);
+  display: grid;
+  gap: 10px;
+}
+
+.plan.featured {
+  background: var(--ink);
+  color: white;
+}
+
+.plan strong {
+  font-size: 44px;
+}
+
+.plan small {
+  color: inherit;
+  opacity: 0.72;
+}
+
+.plan button {
+  margin-top: auto;
+  background: var(--accent-2);
+  color: var(--ink);
+}
+
+.purchase-toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 30;
+  max-width: min(420px, calc(100vw - 32px));
+  border: 1px solid rgba(215, 255, 112, 0.42);
+  border-radius: 20px;
+  padding: 16px 18px;
+  background: var(--accent);
+  color: white;
+  box-shadow: var(--shadow);
+  font-weight: 800;
+}
+
+.deck-page {
+  min-height: 100dvh;
+  padding: 28px clamp(20px, 4vw, 64px) 72px;
+}
+
+.deck-page > section,
+.reader-nav {
+  max-width: 1500px;
+}
+
+.deck-hero {
+  margin: 0 auto 22px;
+  align-items: stretch;
+}
+
+.deck-hero > div {
+  flex: 1;
+  border-top: 1px solid var(--line);
+  padding-top: 36px;
+}
+
+.deck-hero h1 {
+  max-width: 14ch;
+  margin-bottom: 22px;
+  font-family: "Songti SC", STSong, "PingFang SC", serif;
+  font-size: clamp(50px, 7vw, 112px);
+  line-height: 1;
+}
+
+.thesis {
+  max-width: 880px;
+  font-size: clamp(22px, 2.3vw, 36px);
+  line-height: 1.55;
+}
+
+.source-panel {
+  width: min(360px, 32vw);
+  border-radius: 28px;
+  padding: 28px;
+  display: grid;
+  align-content: space-between;
+}
+
+.source-panel span {
+  color: var(--accent);
+  font-family: "SF Mono", Menlo, monospace;
+}
+
+.source-panel a {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.memory-map,
+.turn-section,
+.quote-section {
+  margin: 0 auto 22px;
+  border-radius: 30px;
+  padding: 30px;
+}
+
+.map-copy {
+  min-width: 260px;
+}
+
+.map-nodes {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.map-nodes span {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.6);
+  font-weight: 800;
+}
+
+.map-nodes em {
+  margin-right: 10px;
+  color: var(--accent);
+  font-family: "SF Mono", Menlo, monospace;
+  font-style: normal;
+}
+
+.judgment-grid {
+  max-width: 1500px;
+  margin: 0 auto 22px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.judgment-card {
+  min-height: 520px;
+  border-radius: 32px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: auto;
+  color: var(--accent);
+  font-family: "SF Mono", Menlo, monospace;
+  font-weight: 800;
+}
+
+.card-meta a {
+  border: 1px solid rgba(6, 76, 67, 0.22);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: rgba(215, 255, 112, 0.2);
+  text-decoration: none;
+}
+
+.judgment-card h2 {
+  margin: 110px 0 18px;
+  font-family: "Songti SC", STSong, "PingFang SC", serif;
+  font-size: clamp(34px, 3vw, 54px);
+  line-height: 1.08;
+}
+
+.judgment-card p {
+  color: #34423d;
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.why-use {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.why-use div {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 14px;
+}
+
+.why-use strong,
+.why-use span {
+  display: block;
+}
+
+.why-use strong {
+  margin-bottom: 6px;
+  color: var(--accent);
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.judgment-card small {
+  margin-top: auto;
+  color: var(--muted);
+  font-family: "SF Mono", Menlo, monospace;
+}
+
+.turn-stack {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.turn-stack div {
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+
+.turn-stack span {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--accent);
+  font-weight: 900;
+}
+
+.turn-stack strong {
+  font-size: 22px;
+  line-height: 1.55;
+}
+
+.quote-section {
+  align-items: stretch;
+}
+
+.quote-section > div {
+  min-width: 260px;
+}
+
+blockquote {
+  margin: 0;
+  flex: 1;
+  border-left: 4px solid var(--accent);
+  padding-left: 22px;
+}
+
+blockquote p {
+  font-family: "Songti SC", STSong, "PingFang SC", serif;
+  font-size: 30px;
+  line-height: 1.45;
+}
+
+blockquote footer {
+  color: var(--muted);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1120px) {
+  .workspace,
+  .pricing-section,
+  .judgment-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .left-rail {
+    gap: 28px;
+  }
+
+  .left-rail h1,
+  .deck-hero h1 {
+    max-width: 100%;
+  }
+
+  .right-rail {
+    grid-template-rows: auto;
+  }
+
+  .plans,
+  .turn-stack {
+    grid-template-columns: 1fr;
+  }
+
+  .deck-hero,
+  .memory-map,
+  .quote-section,
+  .panel-heading,
+  .form-footer,
+  .result-card {
+    flex-direction: column;
+  }
+
+  .source-panel {
+    width: 100%;
+  }
+}
+
+@media (max-width: 720px) {
+  .product-shell,
+  .deck-page {
+    padding: 18px 14px 44px;
+  }
+
+  .topbar,
+  .reader-nav {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .nav-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .left-rail,
+  .generator-panel,
+  .right-rail > div,
+  .memory-map,
+  .turn-section,
+  .quote-section,
+  .judgment-card {
+    border-radius: 22px;
+    padding: 22px;
+  }
+
+  .proof-list,
+  .plans {
+    grid-template-columns: 1fr;
+  }
+
+  .judgment-card {
+    min-height: 0;
+  }
+
+  .judgment-card h2 {
+    margin-top: 70px;
+  }
+
+  blockquote p {
+    font-size: 24px;
+  }
+
+  .purchase-toast {
+    right: 14px;
+    bottom: 14px;
+  }
+}
