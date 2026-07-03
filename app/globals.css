@@ -118,6 +118,17 @@ button:disabled {
   text-align: center;
 }
 
+.signin-error {
+  margin-top: 12px;
+  border: 1px solid rgba(139, 32, 32, 0.22);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: rgba(255, 238, 238, 0.76);
+  color: #8b2020;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 .google-login-primary {
   width: 100%;
   min-height: 54px;

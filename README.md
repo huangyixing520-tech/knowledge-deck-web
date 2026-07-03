@@ -45,6 +45,14 @@ http://localhost:3000/api/auth/callback/google
 https://你的线上域名/api/auth/callback/google
 ```
 
+线上快速配置可以直接运行：
+
+```bash
+./scripts/configure_vercel_env.sh
+```
+
+更详细的 Google Cloud 设置见 `GOOGLE_OAUTH_SETUP.md`。
+
 ## 后台和行为记录
 
 管理员访问：

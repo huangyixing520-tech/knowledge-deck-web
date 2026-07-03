@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { estimateCost, plans } from "@/lib/pricing";
 
@@ -26,6 +26,17 @@ function GoogleMark() {
 
 function LoginLanding({ status }) {
   const isChecking = status === "loading";
+  const [authError, setAuthError] = useState("");
+
+  useEffect(() => {
+    const error = new URLSearchParams(window.location.search).get("error");
+    if (error === "google") {
+      setAuthError("Google 登录还缺 OAuth Client ID / Secret。配置完成后这里会直接进入 Google 账号选择。");
+    } else if (error) {
+      setAuthError("登录没有完成，请重新尝试。");
+    }
+  }, []);
+
   return (
     <main className="login-shell">
       <section className="login-copy">
@@ -48,6 +59,7 @@ function LoginLanding({ status }) {
               <GoogleMark />
               {isChecking ? "正在检查登录状态" : "Continue with Google"}
             </button>
+            {authError && <div className="signin-error">{authError}</div>}
             <p>第一版只支持 Google 登录。你的生成记录和后台行为会从这里开始归档。</p>
           </div>
         </div>
