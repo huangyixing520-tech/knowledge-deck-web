@@ -21,6 +21,7 @@ add_env() {
   if [ -z "$value" ]; then
     return 0
   fi
+  npm_config_cache=/tmp/codex-npm-cache npx --yes vercel@latest env rm "$key" "$target" --yes >/dev/null 2>&1 || true
   printf "%s\n" "$value" | npm_config_cache=/tmp/codex-npm-cache npx --yes vercel@latest env add "$key" "$target"
 }
 

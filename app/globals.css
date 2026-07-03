@@ -826,7 +826,8 @@ p {
 }
 
 .admin-metrics,
-.admin-grid {
+.admin-grid,
+.admin-config-panel {
   max-width: 1500px;
   margin: 0 auto;
 }
@@ -840,6 +841,7 @@ p {
 
 .admin-metrics article,
 .admin-panel,
+.admin-config-panel,
 .admin-denied {
   border: 1px solid var(--line);
   border-radius: 28px;
@@ -871,6 +873,60 @@ p {
   display: grid;
   grid-template-columns: minmax(320px, 0.9fr) minmax(420px, 1.1fr);
   gap: 18px;
+}
+
+.admin-config-panel {
+  padding: 26px;
+  margin-bottom: 18px;
+}
+
+.config-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.config-card {
+  min-height: 150px;
+  border: 1px solid rgba(17, 25, 22, 0.1);
+  border-radius: 20px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.58);
+  display: grid;
+  align-content: space-between;
+}
+
+.config-card span {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.config-card.ready span {
+  background: rgba(215, 255, 112, 0.58);
+  color: var(--accent);
+}
+
+.config-card.missing span {
+  background: rgba(255, 238, 238, 0.9);
+  color: #8b2020;
+}
+
+.config-card strong {
+  margin-top: 18px;
+  font-size: 20px;
+}
+
+.config-card p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  line-height: 1.65;
+  overflow-wrap: anywhere;
 }
 
 .admin-panel {
@@ -1229,7 +1285,8 @@ blockquote footer {
   .pricing-section,
   .judgment-grid,
   .admin-grid,
-  .admin-metrics {
+  .admin-metrics,
+  .config-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1328,6 +1385,7 @@ blockquote footer {
 
   .admin-metrics article,
   .admin-panel,
+  .admin-config-panel,
   .admin-denied {
     border-radius: 22px;
     padding: 20px;

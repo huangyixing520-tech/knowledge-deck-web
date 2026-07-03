@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { isAdminEmail } from "@/lib/admin";
 import { getAdminSnapshot } from "@/lib/activityStore";
+import { getConfigStatus } from "@/lib/configStatus";
 
 function formatTime(value) {
   if (!value) return "-";
@@ -42,6 +43,7 @@ export default async function AdminPage() {
   }
 
   const snapshot = await getAdminSnapshot();
+  const configStatus = getConfigStatus();
   const metrics = [
     ["总用户", snapshot.metrics.totalUsers],
     ["今日新增", snapshot.metrics.newUsersToday],
@@ -69,6 +71,22 @@ export default async function AdminPage() {
             <strong>{value}</strong>
           </article>
         ))}
+      </section>
+
+      <section className="admin-config-panel">
+        <div className="admin-panel-head">
+          <h2>上线配置</h2>
+          <span>{configStatus.filter((item) => item.ready).length} / {configStatus.length}</span>
+        </div>
+        <div className="config-grid">
+          {configStatus.map((item) => (
+            <article className={item.ready ? "config-card ready" : "config-card missing"} key={item.key}>
+              <span>{item.ready ? "Ready" : "Missing"}</span>
+              <strong>{item.label}</strong>
+              <p>{item.detail}</p>
+            </article>
+          ))}
+        </div>
       </section>
 
       <section className="admin-grid">
