@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { estimateCost, plans } from "@/lib/pricing";
 
 const exampleLinks = [
@@ -9,6 +10,7 @@ const exampleLinks = [
 ];
 
 export default function HomePage() {
+  const { data: session, status } = useSession();
   const [url, setUrl] = useState(exampleLinks[0]);
   const [balance, setBalance] = useState(420);
   const [state, setState] = useState("idle");
@@ -17,7 +19,8 @@ export default function HomePage() {
   const [notice, setNotice] = useState("");
 
   const cost = useMemo(() => estimateCost(url), [url]);
-  const canRun = /^https?:\/\//.test(url) && balance >= cost && state !== "loading";
+  const isSignedIn = status === "authenticated" && Boolean(session?.user);
+  const canRun = isSignedIn && /^https?:\/\//.test(url) && balance >= cost && state !== "loading";
 
   async function submitJob(event) {
     event.preventDefault();
@@ -34,7 +37,7 @@ export default function HomePage() {
 
     if (!response.ok) {
       setState("error");
-      setError(data.error || "生成失败，请稍后重试。");
+      setError(data.error || (response.status === 401 ? "请先登录后再生成。" : "生成失败，请稍后重试。"));
       return;
     }
 
@@ -59,6 +62,21 @@ export default function HomePage() {
         <div className="nav-actions">
           <span className="pill">余额 {balance} tokens</span>
           <a href="#pricing" className="ghost-link">购买额度</a>
+          {status === "loading" ? (
+            <span className="pill">检查登录中</span>
+          ) : isSignedIn ? (
+            <div className="user-menu">
+              {session.user.image && (
+                <img src={session.user.image} alt="" referrerPolicy="no-referrer" />
+              )}
+              <span>{session.user.name || session.user.email}</span>
+              <button type="button" onClick={() => signOut()}>退出</button>
+            </div>
+          ) : (
+            <button className="google-button" type="button" onClick={() => signIn("google")}>
+              Google 登录
+            </button>
+          )}
         </div>
       </nav>
 
@@ -99,13 +117,23 @@ export default function HomePage() {
             <div className="form-footer">
               <div className="estimate">
                 <strong>预计消耗 {cost} tokens</strong>
-                <span>余额不足时会先进入购买额度，而不是开始任务。</span>
+                <span>{isSignedIn ? "余额不足时会先进入购买额度，而不是开始任务。" : "先用 Google 登录，再开始生成任务。"}</span>
               </div>
               <button disabled={!canRun}>
-                {state === "loading" ? "生成中..." : "开始生成"}
+                {state === "loading" ? "生成中..." : isSignedIn ? "开始生成" : "请先登录"}
               </button>
             </div>
           </form>
+
+          {!isSignedIn && (
+            <div className="status-card signin-card">
+              <div>
+                <strong>先登录，再生成</strong>
+                <p>第一版只支持 Google 登录。登录后会保留你的生成记录、余额和后续知识库。</p>
+              </div>
+              <button type="button" onClick={() => signIn("google")}>使用 Google 登录</button>
+            </div>
+          )}
 
           <div className="example-row">
             {exampleLinks.map((item) => (

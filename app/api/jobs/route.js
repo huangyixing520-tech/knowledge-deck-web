@@ -1,8 +1,19 @@
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { estimateCost } from "@/lib/pricing";
 import { pickCardByUrl } from "@/lib/sampleCards";
 
 export async function POST(request) {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    return NextResponse.json(
+      { error: "请先使用 Google 登录后再生成知识卡片。" },
+      { status: 401 }
+    );
+  }
+
   const body = await request.json().catch(() => ({}));
   const url = String(body.url || "").trim();
 

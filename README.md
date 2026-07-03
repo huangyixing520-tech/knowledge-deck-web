@@ -26,6 +26,24 @@ npm run dev
 
 打开 `http://localhost:3000`。
 
+## Google 登录配置
+
+本项目第一版只支持 Google 登录。复制 `.env.example` 为 `.env.local`，填入：
+
+```bash
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=一段随机长字符串
+GOOGLE_CLIENT_ID=你的 Google OAuth Client ID
+GOOGLE_CLIENT_SECRET=你的 Google OAuth Client Secret
+```
+
+Google OAuth 的回调地址需要配置为：
+
+```text
+http://localhost:3000/api/auth/callback/google
+https://你的线上域名/api/auth/callback/google
+```
+
 如需生产构建：
 
 ```bash
