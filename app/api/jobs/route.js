@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { recordJob, trackEvent, upsertUser } from "@/lib/activityStore";
 import { estimateCost } from "@/lib/pricing";
 import { pickCardByUrl } from "@/lib/sampleCards";
 
@@ -26,9 +27,22 @@ export async function POST(request) {
 
   const card = pickCardByUrl(url);
   const cost = estimateCost(url);
+  await upsertUser(session.user);
+  const job = await recordJob({
+    user: session.user,
+    url,
+    cost,
+    cardId: card.id,
+    status: "ready"
+  });
+  await trackEvent({
+    user: session.user,
+    type: "card_ready",
+    metadata: { jobId: job.id, cardId: card.id, cost }
+  });
 
   return NextResponse.json({
-    jobId: `job_${Date.now()}`,
+    jobId: job.id,
     status: "ready",
     cost,
     balanceAfter: Math.max(0, Number(body.balance || 0) - cost),

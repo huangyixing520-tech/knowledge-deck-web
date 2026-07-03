@@ -11,6 +11,99 @@ const exampleLinks = [
 
 export default function HomePage() {
   const { data: session, status } = useSession();
+  const isSignedIn = status === "authenticated" && Boolean(session?.user);
+
+  if (!isSignedIn) {
+    return <LoginLanding status={status} />;
+  }
+
+  return <Workspace session={session} />;
+}
+
+function GoogleMark() {
+  return <span className="google-mark">G</span>;
+}
+
+function LoginLanding({ status }) {
+  const isChecking = status === "loading";
+  return (
+    <main className="login-shell">
+      <section className="login-copy">
+        <nav className="login-nav">
+          <div className="brand">
+            <span className="brand-mark">KD</span>
+            <span>Knowledge Deck</span>
+          </div>
+          <a href="/cards/demo-fde">看样例卡</a>
+        </nav>
+
+        <div className="login-center">
+          <h1>把播客变成真正记得住的知识卡。</h1>
+          <p>
+            用 Google 登录后，粘贴链接即可生成可分享、可复习、可追踪的知识卡片。
+          </p>
+
+          <div className="signin-box">
+            <button type="button" className="google-login-primary" onClick={() => signIn("google")}>
+              <GoogleMark />
+              {isChecking ? "正在检查登录状态" : "Continue with Google"}
+            </button>
+            <p>第一版只支持 Google 登录。你的生成记录和后台行为会从这里开始归档。</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="login-visual" aria-label="Knowledge Deck product preview">
+        <div className="google-quick-card">
+          <div className="quick-card-head">
+            <GoogleMark />
+            <strong>Google 快捷登录</strong>
+            <button type="button" onClick={() => signIn("google")} aria-label="使用 Google 登录">×</button>
+          </div>
+          <button type="button" className="quick-account" onClick={() => signIn("google")}>
+            <span>G</span>
+            <div>
+              <strong>继续使用 Google</strong>
+              <small>选择浏览器里的 Google 账号</small>
+            </div>
+          </button>
+        </div>
+
+        <div className="visual-stage">
+          <div className="audio-strip">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <strong>52:18</strong>
+          </div>
+          <div className="knowledge-card hero-card">
+            <small>Knowledge card</small>
+            <h2>AI 能力差距，会落在工作流里</h2>
+            <p>真正值得记住的不是观点本身，而是它能不能变成下一次行动的判断标准。</p>
+            <div className="mini-grid">
+              <span>Why</span>
+              <span>Use it</span>
+            </div>
+          </div>
+          <div className="knowledge-card side-card">
+            <small>Saved</small>
+            <strong>本轮收藏 6</strong>
+            <p>判断、行动、金句进入个人知识库。</p>
+          </div>
+          <div className="timeline-card">
+            <span>03:35</span>
+            <span>12:47</span>
+            <span>29:00</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function Workspace({ session }) {
   const [url, setUrl] = useState(exampleLinks[0]);
   const [balance, setBalance] = useState(420);
   const [state, setState] = useState("idle");
@@ -19,8 +112,7 @@ export default function HomePage() {
   const [notice, setNotice] = useState("");
 
   const cost = useMemo(() => estimateCost(url), [url]);
-  const isSignedIn = status === "authenticated" && Boolean(session?.user);
-  const canRun = isSignedIn && /^https?:\/\//.test(url) && balance >= cost && state !== "loading";
+  const canRun = /^https?:\/\//.test(url) && balance >= cost && state !== "loading";
 
   async function submitJob(event) {
     event.preventDefault();
@@ -49,6 +141,14 @@ export default function HomePage() {
   function buyPlan(plan) {
     setBalance((current) => current + plan.tokens);
     setNotice(`已模拟购买 ${plan.name}：+${plan.tokens} tokens。生产版会在这里跳转到支付收银台。`);
+    fetch("/api/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "purchase_clicked",
+        metadata: { plan: plan.name, tokens: plan.tokens, price: plan.price }
+      })
+    }).catch(() => {});
     window.setTimeout(() => setNotice(""), 4200);
   }
 
@@ -62,21 +162,14 @@ export default function HomePage() {
         <div className="nav-actions">
           <span className="pill">余额 {balance} tokens</span>
           <a href="#pricing" className="ghost-link">购买额度</a>
-          {status === "loading" ? (
-            <span className="pill">检查登录中</span>
-          ) : isSignedIn ? (
-            <div className="user-menu">
-              {session.user.image && (
-                <img src={session.user.image} alt="" referrerPolicy="no-referrer" />
-              )}
-              <span>{session.user.name || session.user.email}</span>
-              <button type="button" onClick={() => signOut()}>退出</button>
-            </div>
-          ) : (
-            <button className="google-button" type="button" onClick={() => signIn("google")}>
-              Google 登录
-            </button>
-          )}
+          {session.user.isAdmin && <a href="/admin" className="ghost-link">后台</a>}
+          <div className="user-menu">
+            {session.user.image && (
+              <img src={session.user.image} alt="" referrerPolicy="no-referrer" />
+            )}
+            <span>{session.user.name || session.user.email}</span>
+            <button type="button" onClick={() => signOut()}>退出</button>
+          </div>
         </div>
       </nav>
 
@@ -117,23 +210,13 @@ export default function HomePage() {
             <div className="form-footer">
               <div className="estimate">
                 <strong>预计消耗 {cost} tokens</strong>
-                <span>{isSignedIn ? "余额不足时会先进入购买额度，而不是开始任务。" : "先用 Google 登录，再开始生成任务。"}</span>
+                <span>余额不足时会先进入购买额度，而不是开始任务。</span>
               </div>
               <button disabled={!canRun}>
-                {state === "loading" ? "生成中..." : isSignedIn ? "开始生成" : "请先登录"}
+                {state === "loading" ? "生成中..." : "开始生成"}
               </button>
             </div>
           </form>
-
-          {!isSignedIn && (
-            <div className="status-card signin-card">
-              <div>
-                <strong>先登录，再生成</strong>
-                <p>第一版只支持 Google 登录。登录后会保留你的生成记录、余额和后续知识库。</p>
-              </div>
-              <button type="button" onClick={() => signIn("google")}>使用 Google 登录</button>
-            </div>
-          )}
 
           <div className="example-row">
             {exampleLinks.map((item) => (

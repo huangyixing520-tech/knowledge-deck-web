@@ -35,6 +35,7 @@ NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=一段随机长字符串
 GOOGLE_CLIENT_ID=你的 Google OAuth Client ID
 GOOGLE_CLIENT_SECRET=你的 Google OAuth Client Secret
+ADMIN_EMAILS=你的管理员邮箱,合伙人的管理员邮箱
 ```
 
 Google OAuth 的回调地址需要配置为：
@@ -43,6 +44,21 @@ Google OAuth 的回调地址需要配置为：
 http://localhost:3000/api/auth/callback/google
 https://你的线上域名/api/auth/callback/google
 ```
+
+## 后台和行为记录
+
+管理员访问：
+
+```text
+/admin
+```
+
+后台会展示用户、登录事件、生成记录和购买点击。第一版支持两种存储：
+
+- 配置 `DATABASE_URL`：自动写入 Postgres，并在第一次访问时创建 `kd_users`、`kd_events`、`kd_jobs` 三张表。
+- 不配置 `DATABASE_URL`：使用内存预览模式，适合本地调试，但线上重启后数据会丢失。
+
+推荐生产环境尽快配置 Neon 或 Supabase Postgres，把 `DATABASE_URL` 填到 Vercel 环境变量里。
 
 如需生产构建：
 
