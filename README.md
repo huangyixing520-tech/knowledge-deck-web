@@ -99,6 +99,7 @@ PRODUCT_PLAN.md           产品路线
 
 ## 协作约定
 
+- AI 协作必须遵循 [AI-DLC 方法说明](docs/AI_DLC.md) 和 [团队 AI-DLC 文档驱动协作规则](docs/TEAM_SDLC.md)。
 - 不提交 `.env` 或任何 API key。
 - 提炼内容必须来自全文、文字稿或字幕。
 - 分享页优先保证内容质量、移动端可读性和转发欲。
