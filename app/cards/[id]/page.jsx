@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { sampleCards } from "@/lib/sampleCards";
+import CardActions from "./CardActions";
 
 export function generateStaticParams() {
   return Object.keys(sampleCards).map((id) => ({ id }));
@@ -14,7 +15,10 @@ export default async function CardPage({ params }) {
     <main className="deck-page">
       <nav className="reader-nav">
         <a href="/">Knowledge Deck</a>
-        <span>{card.duration}</span>
+        <div>
+          <span>{card.duration}</span>
+          <CardActions card={card} />
+        </div>
       </nav>
 
       <section className="deck-hero">
@@ -25,7 +29,7 @@ export default async function CardPage({ params }) {
           <p className="reader-note">{card.who}</p>
         </div>
         <aside className="source-panel">
-          <span>Source</span>
+          <span>来源</span>
           <strong>{card.sourceTitle}</strong>
           <a href={card.sourceUrl}>打开原始链接</a>
         </aside>
@@ -33,13 +37,13 @@ export default async function CardPage({ params }) {
 
       <section className="memory-map">
         <div className="map-copy">
-          <p className="kicker">Knowledge map</p>
+          <p className="kicker">知识链路</p>
           <h2>这期内容可以压成一条链</h2>
         </div>
         <div className="map-nodes">
           {card.map.map((node, index) => (
             <span key={node}>
-              <em>{String(index + 1).padStart(2, "0")}</em>
+              <em>{index + 1}</em>
               {node}
             </span>
           ))}
@@ -65,7 +69,7 @@ export default async function CardPage({ params }) {
                 <span>{item.use}</span>
               </div>
             </div>
-            <small>{String(index + 1).padStart(2, "0")} / {card.judgments.length}</small>
+            <small>{index + 1} / {card.judgments.length}</small>
           </article>
         ))}
       </section>
@@ -93,6 +97,15 @@ export default async function CardPage({ params }) {
             <footer>{quote.anchor}</footer>
           </blockquote>
         ))}
+      </section>
+
+      <section className="reader-bottom">
+        <div>
+          <p className="kicker">已保存</p>
+          <h2>这张卡片已经进入你的知识库。</h2>
+          <p>回到首页后可以继续生成，也可以从知识库重新打开。</p>
+        </div>
+        <CardActions card={card} />
       </section>
     </main>
   );

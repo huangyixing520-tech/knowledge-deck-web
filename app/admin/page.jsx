@@ -48,7 +48,9 @@ export default async function AdminPage() {
     ["总用户", snapshot.metrics.totalUsers],
     ["今日新增", snapshot.metrics.newUsersToday],
     ["今日生成", snapshot.metrics.jobsToday],
-    ["今日事件", snapshot.metrics.eventsToday]
+    ["今日事件", snapshot.metrics.eventsToday],
+    ["今日会话", snapshot.metrics.sessionsToday],
+    ["匿名访客", snapshot.metrics.anonymousVisitors]
   ];
 
   return (
@@ -89,6 +91,62 @@ export default async function AdminPage() {
         </div>
       </section>
 
+      <section className="admin-insights">
+        <article className="admin-panel">
+          <div className="admin-panel-head">
+            <h2>转化漏斗</h2>
+            <span>Live</span>
+          </div>
+          <div className="funnel-list">
+            {snapshot.funnel.map((item, index) => (
+              <div className="funnel-row" key={item.label}>
+                <span>{index + 1}</span>
+                <strong>{item.label}</strong>
+                <em>{item.count}</em>
+              </div>
+            ))}
+          </div>
+        </article>
+
+        <article className="admin-panel">
+          <div className="admin-panel-head">
+            <h2>热门行为</h2>
+            <span>{snapshot.topEvents.length}</span>
+          </div>
+          <div className="top-list">
+            {snapshot.topEvents.length === 0 ? (
+              <p className="empty-copy">还没有可统计的行为。</p>
+            ) : (
+              snapshot.topEvents.map((item) => (
+                <div className="top-row" key={item.label}>
+                  <strong>{item.label}</strong>
+                  <span>{item.count}</span>
+                </div>
+              ))
+            )}
+          </div>
+        </article>
+
+        <article className="admin-panel">
+          <div className="admin-panel-head">
+            <h2>热门页面</h2>
+            <span>{snapshot.topPages.length}</span>
+          </div>
+          <div className="top-list">
+            {snapshot.topPages.length === 0 ? (
+              <p className="empty-copy">页面访问会在这里汇总。</p>
+            ) : (
+              snapshot.topPages.map((item) => (
+                <div className="top-row" key={item.label}>
+                  <strong>{item.label}</strong>
+                  <span>{item.count}</span>
+                </div>
+              ))
+            )}
+          </div>
+        </article>
+      </section>
+
       <section className="admin-grid">
         <article className="admin-panel">
           <div className="admin-panel-head">
@@ -127,6 +185,26 @@ export default async function AdminPage() {
                   <strong>{job.email || "匿名用户"}</strong>
                   <span>{shortUrl(job.sourceUrl)}</span>
                   <small>{job.cost} tokens · {job.status} · {formatTime(job.createdAt)}</small>
+                </div>
+              ))
+            )}
+          </div>
+        </article>
+
+        <article className="admin-panel">
+          <div className="admin-panel-head">
+            <h2>最近会话</h2>
+            <span>{snapshot.sessions.length}</span>
+          </div>
+          <div className="admin-list compact">
+            {snapshot.sessions.length === 0 ? (
+              <p className="empty-copy">访客打开产品后，会话会出现在这里。</p>
+            ) : (
+              snapshot.sessions.map((session) => (
+                <div className="session-row" key={session.id}>
+                  <strong>{session.email || "匿名访客"}</strong>
+                  <span>{session.landingPage || "-"}</span>
+                  <small>{session.pageViews} PV · {session.eventCount} 事件 · {formatTime(session.lastSeenAt)}</small>
                 </div>
               ))
             )}

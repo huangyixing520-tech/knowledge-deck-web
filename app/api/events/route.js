@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { trackEvent, upsertUser } from "@/lib/activityStore";
+import { getRequestContext, trackEvent, upsertUser } from "@/lib/activityStore";
 
 export async function POST(request) {
   const session = await getServerSession(authOptions);
@@ -12,6 +12,7 @@ export async function POST(request) {
 
   const body = await request.json().catch(() => ({}));
   const type = String(body.type || "").trim();
+  const analytics = body.analytics || {};
 
   if (!type) {
     return NextResponse.json({ error: "缺少事件类型。" }, { status: 400 });
@@ -21,7 +22,10 @@ export async function POST(request) {
   await trackEvent({
     user: session.user,
     type,
-    metadata: body.metadata || {}
+    metadata: body.metadata || {},
+    visitorId: analytics.visitorId,
+    sessionId: analytics.sessionId,
+    context: getRequestContext(request)
   });
 
   return NextResponse.json({ ok: true });

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { recordJob, trackEvent, upsertUser } from "@/lib/activityStore";
+import { getRequestContext, recordJob, trackEvent, upsertUser } from "@/lib/activityStore";
 import { estimateCost } from "@/lib/pricing";
 import { pickCardByUrl } from "@/lib/sampleCards";
 
@@ -17,6 +17,12 @@ export async function POST(request) {
 
   const body = await request.json().catch(() => ({}));
   const url = String(body.url || "").trim();
+  const analytics = body.analytics || {};
+  const context = {
+    ...getRequestContext(request),
+    pagePath: "/",
+    source: "create_job"
+  };
 
   if (!/^https?:\/\/.+/i.test(url)) {
     return NextResponse.json(
@@ -33,11 +39,17 @@ export async function POST(request) {
     url,
     cost,
     cardId: card.id,
-    status: "ready"
+    status: "ready",
+    visitorId: analytics.visitorId,
+    sessionId: analytics.sessionId,
+    context
   });
   await trackEvent({
     user: session.user,
     type: "card_ready",
+    visitorId: analytics.visitorId,
+    sessionId: analytics.sessionId,
+    context,
     metadata: { jobId: job.id, cardId: card.id, cost }
   });
 
@@ -47,6 +59,9 @@ export async function POST(request) {
     cost,
     balanceAfter: Math.max(0, Number(body.balance || 0) - cost),
     cardId: card.id,
+    cardTitle: card.title,
+    sourceTitle: card.sourceTitle,
+    duration: card.duration,
     cardUrl: `/cards/${card.id}`,
     message:
       "MVP 当前返回样例卡片；下一步会把这里替换成真实转写、提炼和发布队列。"

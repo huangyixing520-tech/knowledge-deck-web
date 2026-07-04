@@ -61,12 +61,34 @@ https://你的线上域名/api/auth/callback/google
 /admin
 ```
 
-后台会展示用户、登录事件、生成记录和购买点击。第一版支持两种存储：
+后台会展示用户、匿名访客、会话、页面访问、点击、表单提交、滚动深度、前端错误、生成记录和购买点击。第一版支持两种存储：
 
-- 配置 `DATABASE_URL`：自动写入 Postgres，并在第一次访问时创建 `kd_users`、`kd_events`、`kd_jobs` 三张表。
+- 配置 `DATABASE_URL`：自动写入 Postgres，并在第一次访问时创建或迁移 `kd_users`、`kd_sessions`、`kd_events`、`kd_jobs` 四张表。
 - 不配置 `DATABASE_URL`：使用内存预览模式，适合本地调试，但线上重启后数据会丢失。
 
-推荐生产环境尽快配置 Neon 或 Supabase Postgres，把 `DATABASE_URL` 填到 Vercel 环境变量里。
+推荐生产环境尽快配置 Neon 或 Supabase Postgres，把 `DATABASE_URL` 填到 Vercel 环境变量里。Supabase 是合适选择，但这里先把它当作 Postgres 数据库使用，不需要马上接 Supabase Auth、Realtime 或 Storage，避免上线前复杂度膨胀。
+
+行为采集入口：
+
+```text
+POST /api/analytics
+```
+
+前端已经自动接入 `AnalyticsTracker`，会记录：
+
+- `page_view`：页面访问。
+- `ui_click`：按钮、链接和可点击元素。
+- `form_submit`：表单提交，但不记录输入框原文。
+- `scroll_depth`：25%、50%、75%、90% 滚动深度。
+- `page_hidden`：页面停留时长和最大滚动深度。
+- `client_error` / `client_rejection`：前端错误。
+- `card_opened`、`card_link_copied`、`card_markdown_exported`：卡片阅读页关键动作。
+
+隐私边界：系统不会保存原始 IP，只保存带盐哈希；不会采集输入框原文；`password`、`token`、`secret`、`cookie`、`email`、`phone` 等敏感字段会被自动打码。建议线上额外配置：
+
+```bash
+ANALYTICS_SALT=一段随机长字符串
+```
 
 如需生产构建：
 
@@ -79,11 +101,14 @@ npm run start
 
 ```text
 app/
+  api/analytics/route.js  匿名和登录用户行为采集 API
   api/jobs/route.js       生成任务 API
   cards/[id]/page.jsx     公开知识卡片页
+  AnalyticsTracker.jsx    自动采集页面、点击和会话行为
   page.jsx                产品首页
   globals.css             全局视觉样式
 lib/
+  activityStore.js         用户、会话、事件和任务存储
   pricing.js              token 套餐和消耗估算
   sampleCards.js          demo 卡片数据
 PRODUCT_PLAN.md           产品路线
