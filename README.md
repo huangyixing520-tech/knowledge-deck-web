@@ -19,12 +19,28 @@
 
 ## 本地运行
 
+建议使用 Node.js 22.12.0；最低需要 Node.js 20.9.0。
+
 ```bash
+nvm use
 npm install
+cp .env.example .env.local
 npm run dev
 ```
 
-打开 `http://localhost:3000`。
+打开 `http://localhost:3000`。如果本机 3000 端口被占用，Next.js 会自动切到 3001 或其他可用端口，以终端输出为准。
+
+未配置 Google OAuth 时也可以先看完整产品页：
+
+```text
+http://localhost:3000/?preview=app
+```
+
+如果端口变成 3001，就打开：
+
+```text
+http://localhost:3001/?preview=app
+```
 
 ## Google 登录配置
 
