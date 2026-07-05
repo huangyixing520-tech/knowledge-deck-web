@@ -2389,7 +2389,7 @@ blockquote p {
   min-height: 100dvh;
   display: grid;
   place-items: center;
-  background: #e5ece6;
+  background: #0b3431;
   overflow: hidden;
 }
 
@@ -2397,46 +2397,32 @@ blockquote p {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(140deg, rgba(12, 57, 56, 0.9), rgba(43, 88, 104, 0.5) 44%, rgba(184, 207, 168, 0.88)),
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.12) 0 1px, transparent 1px 4px);
-}
-
-.ym-art-placeholder {
-  position: relative;
   z-index: 1;
-  width: min(520px, 72%);
-  min-height: 340px;
-  border: 1px dashed rgba(255, 255, 255, 0.62);
-  border-radius: 28px;
-  display: grid;
-  place-items: center;
-  align-content: center;
-  gap: 10px;
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(5, 31, 31, 0.04), rgba(5, 31, 31, 0.28)),
+    linear-gradient(90deg, rgba(5, 31, 31, 0.08), rgba(5, 31, 31, 0));
 }
 
-.ym-art-placeholder span {
-  font-size: 24px;
-  font-weight: 850;
-}
-
-.ym-art-placeholder p {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.72);
+.ym-login-art-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .ym-login-art h2 {
   position: absolute;
   right: clamp(42px, 6vw, 100px);
   bottom: 38px;
-  z-index: 1;
+  z-index: 2;
+  width: min(560px, calc(100% - 84px));
   margin: 0;
   color: #ffffff;
-  font-size: clamp(64px, 7vw, 110px);
+  font-size: clamp(52px, 6vw, 92px);
   line-height: 1;
   font-weight: 500;
+  text-align: right;
 }
 
 .ym-app-shell {

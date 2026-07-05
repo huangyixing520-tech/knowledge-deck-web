@@ -196,11 +196,13 @@ function LoginPage({ status, authError, onBack }) {
         </div>
       </section>
 
-      <section className="ym-login-art" aria-label="登录页图片占位">
-        <div className="ym-art-placeholder">
-          <span>图片占位</span>
-          <p>后续可替换为你生成的品牌视觉。</p>
-        </div>
+      <section className="ym-login-art" aria-label="Knowledge Deck 品牌视觉">
+        <img
+          className="ym-login-art-image"
+          src="/images/login-knowledge-deck.png"
+          alt=""
+          aria-hidden="true"
+        />
         <h2>Capture deeper.</h2>
       </section>
     </main>
